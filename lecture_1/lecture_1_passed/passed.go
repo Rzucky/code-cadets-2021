@@ -1,16 +1,19 @@
 package main
 
 import (
+	//imports are now in a correct order
 	"encoding/json"
 	"fmt"
-	"github.com/pkg/errors"
-	"github.com/sethgrid/pester"
 	"io/ioutil"
 	"log"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/pkg/errors"
+	"github.com/sethgrid/pester"
 )
+
 type passedAPIResponse struct{
 	Name string
 	Age int
@@ -18,33 +21,49 @@ type passedAPIResponse struct{
 	Skills []string
 }
 
-
-
 const passedUrl = "https://run.mocky.io/v3/f7ceece5-47ee-4955-b974-438982267dc8"
 
 func linearBackoff(retry int) time.Duration {
 	return time.Duration(retry) * time.Second
 }
 
-func writingToFile(f *os.File, decodedContent []passedAPIResponse){
-	for i := range decodedContent{
-		if decodedContent[i].Passed{
-			var found = false
-			//var knownSkills []string
-			var knownSkillText = strings.Join(decodedContent[i].Skills, ", ")
-			for _,val := range decodedContent[i].Skills{
-				//knownSkills = append(knownSkills, val)
-
-				if val == "Java" || val == "Go"{
-					found = true
-				}
-			}
-			if found{
-				defer f.WriteString(fmt.Sprintf("%s - %v\n", decodedContent[i].Name, knownSkillText))
-			}
-
+//checking if the specific skill is in a slice which contains all skills
+func contains(skillsToCheck []string, searchedSkill string) bool {
+	for _, skill := range skillsToCheck {
+		if skill == searchedSkill{
+			return true
 		}
+	}
+	return false
+}
 
+func writeApplicationsToFile(f *os.File, applications []passedAPIResponse){
+	//used to store all strings so we can write in a file only once
+	var outputForTheFile string
+
+	for _, applicant := range applications{
+
+		if applicant.Passed{
+			var foundJavaOrGoInSkills = false
+
+			//better way of checking if there is "Java" or "Go" in Skills
+			if contains(applicant.Skills, "Java") || contains(applicant.Skills, "Go") {
+				foundJavaOrGoInSkills = true
+			}
+
+			//each line looks like {Name} - {List of skill separated by a ","} with a newline at the end
+			if foundJavaOrGoInSkills{
+				outputForTheFile += applicant.Name + " - " + strings.Join(applicant.Skills, ", ") + "\n"
+			}
+		}
+	}
+
+	//error handling when writing to file
+	_, err := f.WriteString(fmt.Sprintf("%v", outputForTheFile))
+	if err != nil {
+		log.Fatal(
+			errors.WithMessage(err, "writing to file"),
+		)
 	}
 }
 
@@ -66,15 +85,15 @@ func main() {
 		)
 	}
 
-	var decodedContent []passedAPIResponse
-	err = json.Unmarshal(bodyContent, &decodedContent)
+	var applications []passedAPIResponse
+	err = json.Unmarshal(bodyContent, &applications)
 	if err != nil {
 		log.Fatal(
 			errors.WithMessage(err, "unmarshalling the JSON body content"),
 		)
 	}
 
-	log.Printf("Response from passed: %v", decodedContent)
+	log.Printf("Response from passed API: %v", applications)
 
 	f, err := os.Create("output.txt")
 	if err != nil {
@@ -84,8 +103,7 @@ func main() {
 	}
 
 	defer f.Close()
-	writingToFile(f, decodedContent)
+	writeApplicationsToFile(f, applications)
 	f.Sync()
-
 
 }
