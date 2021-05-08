@@ -1,0 +1,4 @@
+Sergej - Dishwashing, Activism, Go, Docker
+Vedran - Lecturing, Go, Core
+Luka - Go, Java, Linux
+Sven - Java, Football, Programming
