@@ -1,7 +1,7 @@
 package main
 
 import (
-	//imports are now in a correct order
+	//imports
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -46,7 +46,7 @@ func writeApplicationsToFile(f *os.File, applications []passedAPIResponse){
 		if applicant.Passed{
 			var foundJavaOrGoInSkills = false
 
-			//better way of checking if there is "Java" or "Go" in Skills
+			//checking if there is "Java" or "Go" in Skills
 			if contains(applicant.Skills, "Java") || contains(applicant.Skills, "Go") {
 				foundJavaOrGoInSkills = true
 			}
