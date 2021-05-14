@@ -20,7 +20,6 @@ func linearBackoff(retry int) time.Duration {
 	return time.Duration(retry) * time.Second
 }
 
-
 //this struct is used in pokemonLocalEncounters to get the location name and
 //in when finding pokemons name if not given
 type nameGetter struct {
@@ -75,7 +74,6 @@ func getPokemonName(id int) (string, error) {
 	}
 
 	return pokemonName.Name, nil
-
 }
 
 func getPokemonId(name string) (int, error){
@@ -94,8 +92,6 @@ func getPokemonId(name string) (int, error){
 	}
 
 	return pokemonId.Id, nil
-
-
 }
 
 func getPokemonEncounters(id int) ([]pokemonLocalEncounters, error){
@@ -116,7 +112,6 @@ func getPokemonEncounters(id int) ([]pokemonLocalEncounters, error){
 }
 
 
-
 //Finding all local encounters of a specific pokemon.
 //Can be done either with id directly or via name from which we get the id
 func main(){
@@ -125,8 +120,8 @@ func main(){
 	var name string
 
 	//we can enter either pokemon name or it's id
-	flag.IntVar(&id, "id", 0, "Value (inclusive) to end FizzBuzz game with")
-	flag.StringVar(&name, "name", "", "Value (inclusive) from which to start counting numbers for FizzBuzz")
+	flag.IntVar(&id, "id", 0, "Value for the pokemon name")
+	flag.StringVar(&name, "name", "", "Value for the pokemon id")
 
 	flag.Parse()
 
