@@ -5,8 +5,7 @@ type stack struct {
 }
 
 func New() *stack {
-	return &stack{
-	}
+	return &stack{}
 }
 
 func (s *stack) Push(a int) {

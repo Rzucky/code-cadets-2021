@@ -3,18 +3,18 @@ package main
 import (
 	"fmt"
 
-	"code-cadets-2021/lecture_2/01_interfaces/stacklibfer"
-	"code-cadets-2021/lecture_2/01_interfaces/stacklibfoi"
+	"code-cadets-2021/lecture_2/03_interfaces/stacklibfer"
+	"code-cadets-2021/lecture_2/03_interfaces/stacklibfoi"
 )
 
 func main() {
-	s := stacklibfer.New()
+	stack1 := stacklibfer.New()
 
-	pushPopPrint(s, []int{1, 2, 3, 4})
+	pushPopPrint(stack1, []int{1, 2, 3, 4})
 
-	s2 := stacklibfoi.New()
+	stack2 := stacklibfoi.New()
 
-	pushPopPrint(s2, []int{1, 2, 3, 4})
+	pushPopPrint(stack2, []int{1, 2, 3, 4})
 }
 
 func pushPopPrint(stack Stack, numbers []int) {
