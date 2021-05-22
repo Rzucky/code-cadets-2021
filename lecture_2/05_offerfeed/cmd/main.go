@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"code-cadets-2021/lecture_2/05_offerfeed/cmd/bootstrap"
-	"code-cadets-2021/lecture_2/05_offerfeed/internal/domain/services"
 	"code-cadets-2021/lecture_2/05_offerfeed/internal/tasks"
 )
 
@@ -12,13 +11,15 @@ func main() {
 
 	signalHandler := bootstrap.NewSignalHandler()
 
-	feed := bootstrap.NewAxilisOfferFeed()
+	feedJSON := bootstrap.NewAxilisOfferFeed()
+	feedNonJSON := bootstrap.NewNonJSONAxilisOfferFeed()
+	feedMerger := bootstrap.NewFeedMerger(feedJSON, feedNonJSON)
 	queue := bootstrap.NewOrderedQueue()
 
-	processingService := services.NewFeedProcessorService(feed, queue)
+	processingService := bootstrap.NewFeedProcessorService(feedMerger, queue)
 
 	// blocking call, start "the application"
-	tasks.RunTasks(signalHandler, feed, queue, processingService)
+	tasks.RunTasks(signalHandler, feedJSON, feedNonJSON, feedMerger, queue, processingService)
 
 	fmt.Println("program finished gracefully")
 

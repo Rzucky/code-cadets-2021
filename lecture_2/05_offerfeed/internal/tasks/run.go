@@ -20,7 +20,10 @@ func RunTasks(tasks ...Task) {
 			defer wg.Done()
 			defer cancel()
 
-			_ = task.Start(ctx)
+			err := task.Start(ctx)
+			if err != nil {
+				log.Printf("run task, task start", err)
+			}
 		}(i, task)
 	}
 
@@ -29,7 +32,6 @@ func RunTasks(tasks ...Task) {
 	wg.Wait()
 	log.Print("all tasks finished")
 }
-
 
 type Task interface {
 	Start(ctx context.Context) error

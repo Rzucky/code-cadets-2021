@@ -7,7 +7,6 @@ import (
 
 	"code-cadets-2021/lecture_2/05_offerfeed/internal/domain/models"
 	"github.com/pkg/errors"
-
 )
 
 type OrderedQueue struct {
@@ -29,7 +28,7 @@ func (o *OrderedQueue) Start(ctx context.Context) error {
 	}
 
 	//iterating over source channel
-	for x := range o.source{
+	for x := range o.source {
 		//updating queue slice
 		o.queue = append(o.queue, x)
 		//when source channel is closed exits
@@ -61,7 +60,7 @@ func (o *OrderedQueue) loadFromFile() error {
 	if err != nil {
 		return errors.Wrap(err, "checking file info")
 	}
-	if fileSize.Size() == 0{
+	if fileSize.Size() == 0 {
 		return errors.Wrap(err, "EOF in file")
 	}
 
