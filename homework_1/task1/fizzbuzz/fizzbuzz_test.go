@@ -20,8 +20,7 @@ func areSlicesEqual(first []string, second []string) bool {
 	return true
 }
 
-
-func TestFizzBuzz(t *testing.T){
+func TestFizzBuzz(t *testing.T) {
 	for _, tc := range getTestCases() {
 		actualOutput, actualErr := fizzbuzz.FizzBuzz(tc.inputStart, tc.inputEnd)
 

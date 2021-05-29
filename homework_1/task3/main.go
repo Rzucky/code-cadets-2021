@@ -20,24 +20,27 @@ func linearBackoff(retry int) time.Duration {
 	return time.Duration(retry) * time.Second
 }
 
-//this struct is used in pokemonLocalEncounters to get the location name and
-//in when finding pokemons name if not given
-type nameGetter struct {
-	Name 		string	  `json:"name"`
+type pokemonName struct {
+	Name string `json:"name"`
 }
 
-type idGetter struct {
-	Id 			int 	 `json:"id"`
+type pokemonId struct {
+	Id int `json:"id"`
 }
 
+type locationAreaName struct {
+	Name string `json:"name"`
+}
+
+// locationAreaName is used to get the name of the area for each location_area
 type pokemonLocalEncounters struct {
-	LocalEncounterArea nameGetter	`json:"location_area"`
+	LocalEncounterArea locationAreaName `json:"location_area"`
 }
 
-//combined data for a specific pokemon
+// combined data for a specific pokemon
 type pokemonData struct {
-	Name 			string	 	  `json:"name"`
-	Locations 		[]string	  `json:"location_areas"`
+	Name      string   `json:"name"`
+	Locations []string `json:"location_areas"`
 }
 
 //returns []byte from a given URL
@@ -58,7 +61,6 @@ func gettingJSONBodyContent(url string) ([]byte, error) {
 	return bodyContent, nil
 }
 
-
 func getPokemonName(id int) (string, error) {
 	pokemonIdUrl := pokemonURL + strconv.Itoa(id)
 
@@ -67,7 +69,7 @@ func getPokemonName(id int) (string, error) {
 		return "", err
 	}
 
-	var pokemonName nameGetter
+	var pokemonName pokemonName
 	err = json.Unmarshal(bodyContent, &pokemonName)
 	if err != nil {
 		return "", errors.WithMessage(err, "unmarshalling the JSON body content")
@@ -76,7 +78,7 @@ func getPokemonName(id int) (string, error) {
 	return pokemonName.Name, nil
 }
 
-func getPokemonId(name string) (int, error){
+func getPokemonId(name string) (int, error) {
 
 	pokemonNameUrl := pokemonURL + name
 
@@ -85,7 +87,7 @@ func getPokemonId(name string) (int, error){
 		return 0, err
 	}
 
-	var pokemonId idGetter
+	var pokemonId pokemonId
 	err = json.Unmarshal(bodyContent, &pokemonId)
 	if err != nil {
 		return 0, errors.WithMessage(err, "unmarshalling the JSON body content")
@@ -94,7 +96,7 @@ func getPokemonId(name string) (int, error){
 	return pokemonId.Id, nil
 }
 
-func getPokemonEncounters(id int) ([]pokemonLocalEncounters, error){
+func getPokemonEncounters(id int) ([]pokemonLocalEncounters, error) {
 	pokemonEncountersUrl := pokemonURL + strconv.Itoa(id) + "/encounters"
 
 	bodyContent, err := gettingJSONBodyContent(pokemonEncountersUrl)
@@ -111,15 +113,14 @@ func getPokemonEncounters(id int) ([]pokemonLocalEncounters, error){
 	return pokemonFoundLocations, nil
 }
 
-
-//Finding all local encounters of a specific pokemon.
-//Can be done either with id directly or via name from which we get the id
-func main(){
+// Finding all local encounters of a specific pokemon.
+// Can be done either with id directly or via name from which we get the id
+func main() {
 
 	var id int
 	var name string
 
-	//we can enter either pokemon name or it's id
+	// we can enter either pokemon name or it's id
 	flag.IntVar(&id, "id", 0, "Value for the pokemon name")
 	flag.StringVar(&name, "name", "", "Value for the pokemon id")
 
@@ -137,12 +138,12 @@ func main(){
 		)
 	}
 
-	//if someone entered the name with an uppercase letter
+	// if someone entered the name with an uppercase letter
 	if len(name) != 0 {
 		name = strings.ToLower(name)
 	}
 
-	//getting name over id
+	// getting name over id
 	if id != 0 && len(name) == 0 {
 		foundName, err := getPokemonName(id)
 		if err != nil {
@@ -153,8 +154,8 @@ func main(){
 		name = foundName
 	}
 
-	//getting id over pokemons id
-	if len(name) != 0 && id == 0{
+	// getting id over pokemons id
+	if len(name) != 0 && id == 0 {
 		foundId, err := getPokemonId(name)
 		if err != nil {
 			log.Fatal(
@@ -164,7 +165,7 @@ func main(){
 		id = foundId
 	}
 
-	//getting encounters over id
+	// getting encounters over id
 	pokemonFoundLocations, err := getPokemonEncounters(id)
 	if err != nil {
 		log.Fatal(
@@ -173,22 +174,22 @@ func main(){
 	}
 
 	var NameAndLocationsCombined pokemonData
-	//the name was either given from the start or gotten via id
+	// the name was either given from the start or gotten via id
 	NameAndLocationsCombined.Name = name
 
-	//adding all locations into one string splice
-	for _,location := range pokemonFoundLocations{
+	// adding all locations into one string splice
+	for _, location := range pokemonFoundLocations {
 		NameAndLocationsCombined.Locations = append(NameAndLocationsCombined.Locations, location.LocalEncounterArea.Name)
 	}
 
-	//printOutput is []byte
+	// printOutput is []byte
 	printOutput, err := json.Marshal(NameAndLocationsCombined)
 	if err != nil {
 		log.Fatal(
 			errors.WithMessage(err, "marshalling the pokemon data into JSON"),
 		)
 	}
-	//printing []byte into a readable JSON
+	// printing []byte into a readable JSON
 	_, err = os.Stdout.Write(printOutput)
 	if err != nil {
 		log.Fatal(

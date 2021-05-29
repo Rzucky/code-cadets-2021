@@ -35,7 +35,6 @@ func getTestCases() []testCase {
 			},
 			expectedOutput: 800,
 			expectingError: false,
-
 		},
 
 		{
@@ -61,7 +60,6 @@ func getTestCases() []testCase {
 			},
 			expectedOutput: 265,
 			expectingError: false,
-
 		},
 		{
 			income: 150,
@@ -86,7 +84,6 @@ func getTestCases() []testCase {
 			},
 			expectedOutput: 0,
 			expectingError: false,
-
 		},
 
 		{
@@ -112,7 +109,6 @@ func getTestCases() []testCase {
 			},
 
 			expectingError: true,
-
 		},
 		{
 			income: 7000,
@@ -137,7 +133,6 @@ func getTestCases() []testCase {
 			},
 			expectedOutput: 900,
 			expectingError: false,
-
 		},
 		{
 			income: 7000,
@@ -162,7 +157,6 @@ func getTestCases() []testCase {
 			},
 
 			expectingError: true,
-
 		},
 		{
 			income: 7000,
@@ -187,7 +181,6 @@ func getTestCases() []testCase {
 			},
 
 			expectingError: true,
-
 		},
 		{
 			income: 7000,
@@ -199,8 +192,7 @@ func getTestCases() []testCase {
 				},
 			},
 
-			expectingError: true,
-
+			expectingError: false,
 		},
 		{
 			income: 7000,
@@ -225,7 +217,6 @@ func getTestCases() []testCase {
 			},
 			expectedOutput: 400,
 			expectingError: false,
-
 		},
 		{
 			income: 27000,
@@ -250,7 +241,6 @@ func getTestCases() []testCase {
 			},
 			expectedOutput: 7200,
 			expectingError: false,
-
 		},
 		{
 			income: 0,

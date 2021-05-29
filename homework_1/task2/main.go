@@ -40,9 +40,7 @@ func main() {
 
 	calculatedTax, err := progressivetax.CalculateProgressiveTax(enteredIncome, taxBracket)
 	if err != nil {
-		log.Fatal(
-			err,
-		)
+		log.Fatal(err)
 	}
 	fmt.Printf("Total tax for the amount of %.1f is: %.2f", enteredIncome, calculatedTax)
 }

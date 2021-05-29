@@ -8,6 +8,7 @@ import (
 
 func TestCalculateProgressiveTax(t *testing.T) {
 	for _, tc := range getTestCases() {
+
 		actualOutput, actualErr := progressivetax.CalculateProgressiveTax(tc.income, tc.taxBrackets)
 
 		if tc.expectingError {
@@ -19,7 +20,7 @@ func TestCalculateProgressiveTax(t *testing.T) {
 				t.Errorf("Expected no error but got non-nil error: %v", actualErr)
 			}
 
-			if actualOutput != tc.expectedOutput{
+			if actualOutput != tc.expectedOutput {
 				t.Errorf(
 					"Actual and expected output is not equal - actual: %v, expected: %v",
 					actualOutput,
