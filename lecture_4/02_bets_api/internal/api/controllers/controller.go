@@ -11,6 +11,10 @@ type Controller struct {
 	betRepository BetRepository
 }
 
+const wonStatus = "won"
+const lostStatus = "lost"
+const activeStatus = "active"
+
 // NewController creates a new instance of Controller
 func NewController(betRepository BetRepository) *Controller {
 	return &Controller{
@@ -67,7 +71,7 @@ func (e *Controller) GetBetByStatus() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		status := ctx.Query("status")
 
-		if status != "lost" && status != "won" && status != "active" {
+		if status != lostStatus && status != wonStatus && status != activeStatus {
 			ctx.String(http.StatusInternalServerError, "status is not valid.")
 			return
 		}
