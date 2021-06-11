@@ -12,7 +12,7 @@ import (
 )
 
 func newBetValidator() *validators.BetValidator {
-	return validators.NewBetValidator()
+	return validators.NewBetValidator(config.Cfg)
 }
 
 func newBetPublisher(publisher rabbitmq.QueuePublisher) *rabbitmq.BetPublisher {

@@ -6,11 +6,15 @@ import (
 )
 
 // BetValidator validates bet input requests.
-type BetValidator struct{}
+type BetValidator struct {
+	Configuration config.Config
+}
 
 // NewBetValidator creates a new instance of BetValidator.
-func NewBetValidator() *BetValidator {
-	return &BetValidator{}
+func NewBetValidator(configuration config.Config) *BetValidator {
+	return &BetValidator{
+		Configuration: configuration,
+	}
 }
 
 // BetInputIsValid checks if bet input is valid.
@@ -19,9 +23,9 @@ func NewBetValidator() *BetValidator {
 func (e *BetValidator) BetInputIsValid(betRequestDto models.BetRequestDto) bool {
 	if betRequestDto.CustomerId != "" &&
 		betRequestDto.SelectionId != "" &&
-		betRequestDto.SelectionCoefficient <= config.Cfg.InputConfig.MaxCoefficient &&
-		betRequestDto.Payment <= config.Cfg.InputConfig.MaxPayment &&
-		betRequestDto.Payment >= config.Cfg.InputConfig.MinPayment {
+		betRequestDto.SelectionCoefficient <= e.Configuration.InputConfig.MaxCoefficient &&
+		betRequestDto.Payment <= e.Configuration.InputConfig.MaxPayment &&
+		betRequestDto.Payment >= e.Configuration.InputConfig.MinPayment {
 		return true
 	}
 	return false
