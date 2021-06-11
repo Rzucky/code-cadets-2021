@@ -11,9 +11,11 @@ type Controller struct {
 	betRepository BetRepository
 }
 
-const wonStatus = "won"
-const lostStatus = "lost"
-const activeStatus = "active"
+const (
+	wonStatus    = "won"
+	lostStatus   = "lost"
+	activeStatus = "active"
+)
 
 // NewController creates a new instance of Controller
 func NewController(betRepository BetRepository) *Controller {
@@ -28,7 +30,7 @@ func (e *Controller) GetBet() gin.HandlerFunc {
 
 		betId := ctx.Param("id")
 		if betId == "" {
-			ctx.String(http.StatusInternalServerError, "id is not valid.")
+			ctx.String(http.StatusBadRequest, "id is not valid.")
 			return
 		}
 
@@ -49,7 +51,7 @@ func (e *Controller) GetBetsByUserID() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		userId := ctx.Param("id")
 		if userId == "" {
-			ctx.String(http.StatusInternalServerError, "user id is not valid.")
+			ctx.String(http.StatusBadRequest, "user id is not valid.")
 			return
 		}
 		foundBets, found, err := e.betRepository.GetBetsByUserID(ctx, userId)
@@ -72,7 +74,7 @@ func (e *Controller) GetBetByStatus() gin.HandlerFunc {
 		status := ctx.Query("status")
 
 		if status != lostStatus && status != wonStatus && status != activeStatus {
-			ctx.String(http.StatusInternalServerError, "status is not valid.")
+			ctx.String(http.StatusBadRequest, "status is not valid.")
 			return
 		}
 

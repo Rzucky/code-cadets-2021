@@ -47,9 +47,6 @@ func (r *BetRepository) queryGetBetByID(ctx context.Context, id string) (storage
 	defer row.Close()
 
 	// This will move to the "next" result (which is the only result, because a single bet is fetched).
-	// row.Next()
-
-	// This will move to the "next" result (which is the only result, because a single bet is fetched).
 	if !row.Next() {
 		return storagemodels.Bet{}, sql.ErrNoRows
 	}
