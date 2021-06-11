@@ -60,14 +60,14 @@ func ResolveBets(client http.Client, bets []models.BetDto) error {
 		}
 
 		// printOutput is []byte
-		printOutput, err := json.Marshal(update)
+		marshalledUpdate, err := json.Marshal(update)
 		if err != nil {
 			return errors.WithMessage(err, "marshalling event updates data into JSON")
 		}
 
 		eventUpdatesUrl := ipAddress + eventApiPort + eventPath
-		printOutputReader := bytes.NewReader(printOutput)
-		_, err = client.Post(eventUpdatesUrl, "application/json", printOutputReader)
+		marshalledUpdateReader := bytes.NewReader(marshalledUpdate)
+		_, err = client.Post(eventUpdatesUrl, "application/json", marshalledUpdateReader)
 		if err != nil {
 			return errors.WithMessage(err, "error sending POST request to update event.")
 		}
